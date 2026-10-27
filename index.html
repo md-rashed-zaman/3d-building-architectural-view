@@ -1,0 +1,1450 @@
+<meta charset="utf-8">
+<title>Jannatul Mawa 3D</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="icon" href="data:,">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Walk-through 3D model of the Jannatul Mawa 9-storied residential building, generated from its typical floor plan.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: full-bleed 3D stage, with quiet instrument panels pinned to its edges like a drawing's title block */
+:root {
+  --sky: #dfe5e8;
+  --panel: rgba(250, 250, 247, 0.9);
+  --panel-solid: #fafaf7;
+  --ink: #1c2226;
+  --muted: #5a646b;
+  --line: rgba(28, 34, 38, 0.13);
+  --accent: #1d5c86;
+  --accent-ink: #ffffff;
+  --hover: rgba(29, 92, 134, 0.08);
+  --unit-a: #5f9474;
+  --unit-b: #4f74ad;
+  --unit-c: #b9822f;
+  --shadow: 0 1px 2px rgba(20, 30, 40, 0.08), 0 8px 28px rgba(20, 30, 40, 0.1);
+  --display: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --body: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --gutter-l: max(16px, env(safe-area-inset-left, 0px));
+  --gutter-r: max(16px, env(safe-area-inset-right, 0px));
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --sky: #1a2024; --panel: rgba(24, 29, 33, 0.88); --panel-solid: #181d21; --ink: #e7eaec; --muted: #9aa4ab;
+    --line: rgba(255, 255, 255, 0.11); --accent: #7db4dc; --accent-ink: #0f1a22; --hover: rgba(125, 180, 220, 0.1);
+    --unit-a: #7fb894; --unit-b: #82a3d8; --unit-c: #d9a456; --shadow: 0 1px 2px rgba(0,0,0,.3), 0 10px 30px rgba(0,0,0,.35);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --sky: #1a2024; --panel: rgba(24, 29, 33, 0.88); --panel-solid: #181d21; --ink: #e7eaec; --muted: #9aa4ab;
+  --line: rgba(255, 255, 255, 0.11); --accent: #7db4dc; --accent-ink: #0f1a22; --hover: rgba(125, 180, 220, 0.1);
+  --unit-a: #7fb894; --unit-b: #82a3d8; --unit-c: #d9a456; --shadow: 0 1px 2px rgba(0,0,0,.3), 0 10px 30px rgba(0,0,0,.35);
+  color-scheme: dark;
+}
+[hidden] { display: none !important; }
+html, body { height: 100%; }
+body { background: var(--sky); color: var(--ink); font-family: var(--body); font-size: 14px; overflow: hidden; -webkit-font-smoothing: antialiased; }
+button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+button:focus-visible, input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+#stage { position: fixed; inset: 0; touch-action: none; }
+#stage canvas { display: block; }
+#labels { position: fixed; inset: 0; pointer-events: none; }
+
+.chrome { position: fixed; z-index: 5; background: var(--panel); backdrop-filter: blur(14px) saturate(1.2); -webkit-backdrop-filter: blur(14px) saturate(1.2); border: 1px solid var(--line); border-radius: 10px; box-shadow: var(--shadow); }
+
+/* title block */
+.brand { top: calc(16px + env(safe-area-inset-top, 0px)); left: var(--gutter-l); width: 300px; padding: 14px 16px 13px; }
+.eyebrow { font-family: var(--mono); font-size: 10.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.brand h1 { margin: 6px 0 4px; font-family: var(--display); font-stretch: 125%; font-weight: 800; font-size: 21px; letter-spacing: .04em; text-transform: uppercase; line-height: 1.05; text-wrap: balance; }
+.brand p { margin: 0; color: var(--muted); font-size: 12.5px; line-height: 1.45; }
+
+/* view modes */
+.modes { top: calc(16px + env(safe-area-inset-top, 0px)); left: 50%; transform: translateX(-50%); display: flex; gap: 2px; padding: 4px; }
+.modes button { padding: 8px 14px; border-radius: 7px; font-weight: 600; font-size: 13px; letter-spacing: .01em; display: flex; align-items: center; gap: 7px; white-space: nowrap; }
+.modes button svg { width: 15px; height: 15px; stroke: currentColor; fill: none; stroke-width: 1.6; }
+.modes button:hover { background: var(--hover); }
+.modes button[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); }
+
+/* level stack, drawn like a building section */
+.levels { top: 50%; right: var(--gutter-r); transform: translateY(-50%); padding: 8px 6px; display: flex; flex-direction: column; align-items: center; gap: 2px; }
+.levels .cap { font-family: var(--mono); font-size: 9.5px; letter-spacing: .1em; color: var(--muted); text-transform: uppercase; padding: 2px 0 6px; }
+.levels button { width: 38px; height: 30px; border-radius: 6px; font-family: var(--mono); font-weight: 500; font-size: 13px; position: relative; font-variant-numeric: tabular-nums; }
+.levels button:hover { background: var(--hover); }
+.levels button[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); }
+.levels button.roof { border-bottom: 1px solid var(--line); border-radius: 6px 6px 0 0; margin-bottom: 3px; }
+.levels button.ground { border-top: 1px solid var(--line); border-radius: 0 0 6px 6px; margin-top: 3px; }
+
+/* side panel */
+.panel { top: calc(16px + env(safe-area-inset-top, 0px) + var(--brand-h, 118px) + 10px); left: var(--gutter-l); width: 300px; bottom: calc(16px + env(safe-area-inset-bottom, 0px)); overflow-y: auto; overscroll-behavior: contain; display: flex; flex-direction: column; }
+.panel section { padding: 14px 16px; border-bottom: 1px solid var(--line); display: flex; flex-direction: column; gap: 10px; }
+.panel section:last-child { border-bottom: 0; }
+.panel h2 { margin: 0; font-family: var(--display); font-stretch: 110%; font-size: 15px; font-weight: 700; letter-spacing: .01em; }
+.panel h3 { margin: 0; font-family: var(--mono); font-weight: 500; font-size: 10.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.panel .lede { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.5; }
+
+.units { display: flex; flex-direction: column; gap: 6px; }
+.unit { border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+.unit > button { width: 100%; display: grid; grid-template-columns: 10px 1fr auto; gap: 10px; align-items: center; padding: 10px 12px; text-align: left; }
+.unit > button:hover { background: var(--hover); }
+.unit .sw { width: 10px; height: 10px; border-radius: 2px; background: var(--c); }
+.unit .nm { font-weight: 650; font-size: 14px; }
+.unit .meta { color: var(--muted); font-size: 12px; margin-top: 2px; }
+.unit .sft { font-family: var(--mono); font-size: 12.5px; font-variant-numeric: tabular-nums; }
+.unit[data-open="true"] { border-color: color-mix(in srgb, var(--c) 60%, transparent); box-shadow: inset 3px 0 0 var(--c); }
+.rooms { list-style: none; margin: 0; padding: 0 0 6px; display: none; }
+.unit[data-open="true"] .rooms { display: block; }
+.rooms button { width: 100%; display: flex; justify-content: space-between; gap: 10px; padding: 6px 12px 6px 32px; text-align: left; font-size: 13px; }
+.rooms button:hover, .rooms button[aria-current="true"] { background: var(--hover); }
+.rooms .d { font-family: var(--mono); font-size: 11.5px; color: var(--muted); white-space: nowrap; }
+
+.common { display: grid; grid-template-columns: 1fr auto; gap: 6px 12px; font-size: 13px; }
+.common .d { font-family: var(--mono); font-size: 11.5px; color: var(--muted); text-align: right; }
+
+.toggles { display: flex; flex-direction: column; gap: 8px; }
+.switch { display: flex; align-items: center; justify-content: space-between; gap: 12px; font-size: 13px; cursor: pointer; }
+.switch input { appearance: none; width: 32px; height: 18px; border-radius: 9px; background: var(--line); position: relative; cursor: pointer; transition: background .15s; flex: none; }
+.switch input::after { content: ""; position: absolute; top: 2px; left: 2px; width: 14px; height: 14px; border-radius: 50%; background: var(--panel-solid); box-shadow: 0 1px 2px rgba(0,0,0,.25); transition: transform .15s; }
+.switch input:checked { background: var(--accent); }
+.switch input:checked::after { transform: translateX(14px); }
+.sun { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 10px; font-size: 13px; }
+.sun output { font-family: var(--mono); font-size: 12px; font-variant-numeric: tabular-nums; min-width: 38px; text-align: right; }
+.sun input { width: 100%; accent-color: var(--accent); }
+.note kbd { font-family: var(--mono); font-size: 10.5px; border: 1px solid var(--line); border-bottom-width: 2px; border-radius: 4px; padding: 0 4px; color: var(--ink); }
+.note { font-size: 11.5px; line-height: 1.5; color: var(--muted); margin: 0; }
+
+/* selected room card */
+.card { left: 50%; transform: translateX(-50%); bottom: calc(64px + env(safe-area-inset-bottom, 0px)); width: min(380px, calc(100% - 32px)); padding: 14px 16px; display: grid; grid-template-columns: 1fr auto; gap: 4px 12px; }
+.card .t { font-family: var(--display); font-stretch: 110%; font-weight: 700; font-size: 17px; }
+.card .s { color: var(--muted); font-size: 12.5px; }
+.card dl { grid-column: 1 / -1; margin: 8px 0 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.card dt { font-family: var(--mono); font-size: 10px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.card dd { margin: 2px 0 0; font-family: var(--mono); font-size: 13px; font-variant-numeric: tabular-nums; }
+.card .x { width: 28px; height: 28px; border-radius: 6px; display: grid; place-items: center; align-self: start; color: var(--muted); }
+.card .x:hover { background: var(--hover); color: var(--ink); }
+
+.hint { left: 50%; transform: translateX(-50%); bottom: calc(16px + env(safe-area-inset-bottom, 0px)); padding: 8px 14px; font-size: 12.5px; color: var(--muted); white-space: nowrap; max-width: calc(100% - 32px); overflow: hidden; text-overflow: ellipsis; }
+.hint kbd { font-family: var(--mono); font-size: 11px; border: 1px solid var(--line); border-bottom-width: 2px; border-radius: 4px; padding: 0 5px; color: var(--ink); background: var(--panel-solid); }
+
+.where { left: 50%; transform: translateX(-50%); top: calc(70px + env(safe-area-inset-top, 0px)); padding: 7px 14px; font-size: 13px; font-weight: 600; white-space: nowrap; }
+.where span { color: var(--muted); font-weight: 400; }
+
+.corner { right: var(--gutter-r); bottom: calc(16px + env(safe-area-inset-bottom, 0px)); padding: 8px; display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
+.compass { width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--line); display: grid; place-items: center; position: relative; }
+.compass svg { width: 30px; height: 30px; transition: none; }
+#minimap { width: 190px; height: 190px; border-radius: 6px; display: block; }
+
+.joy { position: fixed; z-index: 6; left: calc(var(--gutter-l) + 8px); bottom: calc(28px + env(safe-area-inset-bottom, 0px)); width: 116px; height: 116px; border-radius: 50%; border: 1px solid var(--line); background: var(--panel); backdrop-filter: blur(10px); touch-action: none; }
+.joy i { position: absolute; left: 50%; top: 50%; width: 46px; height: 46px; margin: -23px 0 0 -23px; border-radius: 50%; background: var(--accent); opacity: .85; }
+
+.label { font-family: var(--body); text-align: center; pointer-events: auto; cursor: pointer; padding: 3px 7px 4px; border-radius: 5px; background: var(--panel); border: 1px solid var(--line); box-shadow: 0 1px 3px rgba(0,0,0,.08); line-height: 1.2; transition: opacity .2s; }
+.label b { display: block; font-size: 11.5px; font-weight: 650; white-space: nowrap; }
+.label small { display: block; font-family: var(--mono); font-size: 10px; color: var(--muted); white-space: nowrap; }
+.label.unit-a { border-color: color-mix(in srgb, var(--unit-a) 55%, transparent); }
+.label.unit-b { border-color: color-mix(in srgb, var(--unit-b) 55%, transparent); }
+.label.unit-c { border-color: color-mix(in srgb, var(--unit-c) 55%, transparent); }
+.label.dim { opacity: .35; }
+.label.compact small { display: none; }
+
+.menu-btn { display: none; }
+.tip { position: fixed; z-index: 7; pointer-events: none; padding: 6px 10px; font-size: 12.5px; white-space: nowrap; transform: translate(14px, 16px); border-radius: 7px; }
+.tip b { font-weight: 650; }
+.tip span { color: var(--muted); margin-left: 6px; }
+.tip code { font-family: var(--mono); font-size: 11.5px; color: var(--muted); margin-left: 6px; }
+.scale { left: calc(var(--gutter-l) + 316px); bottom: calc(16px + env(safe-area-inset-bottom, 0px)); padding: 8px 12px; display: flex; align-items: center; gap: 10px; font-family: var(--mono); font-size: 11.5px; font-variant-numeric: tabular-nums; }
+.scale i { display: block; height: 7px; border: 1.5px solid var(--ink); border-top: 0; }
+.card .actions { grid-column: 1 / -1; display: flex; gap: 8px; margin-top: 8px; }
+.btn { padding: 7px 12px; border-radius: 7px; border: 1px solid var(--line); font-weight: 600; font-size: 12.5px; display: inline-flex; gap: 7px; align-items: center; }
+.btn:hover { background: var(--hover); }
+.btn.primary { background: var(--accent); color: var(--accent-ink); border-color: transparent; }
+.btn svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 1.7; }
+.rooms .walkin { color: var(--accent); font-weight: 600; justify-content: flex-start; gap: 8px; }
+.rooms .walkin svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 1.7; }
+#minimap { cursor: crosshair; }
+body.walking .panel, body.walking .brand { display: none; }
+.loading { position: fixed; inset: 0; z-index: 20; display: grid; place-items: center; background: var(--sky); font-family: var(--mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); transition: opacity .4s; }
+
+@media (max-width: 1100px) {
+  .brand { width: auto; right: calc(var(--gutter-r) + 56px); padding: 10px 12px; }
+  .brand h1 { font-size: 16px; margin: 3px 0 0; }
+  .brand p, .brand .eyebrow { display: none; }
+  .modes { top: auto; bottom: calc(16px + env(safe-area-inset-bottom, 0px)); left: var(--gutter-l); right: var(--gutter-r); transform: none; justify-content: space-between; }
+  .modes button { flex: 1; justify-content: center; padding: 9px 6px; }
+  .menu-btn { display: grid; place-items: center; position: fixed; z-index: 6; top: calc(16px + env(safe-area-inset-top, 0px)); right: var(--gutter-r); width: 44px; height: 44px; }
+  .menu-btn svg { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 1.8; }
+  .panel { top: auto; left: var(--gutter-l); right: var(--gutter-r); width: auto; bottom: calc(76px + env(safe-area-inset-bottom, 0px)); max-height: 58%; }
+  .panel:not(.open) { display: none; }
+  .levels { top: calc(72px + env(safe-area-inset-top, 0px)); transform: none; padding: 6px 4px; }
+  .levels button { width: 34px; height: 27px; font-size: 12px; }
+  .levels .cap { display: none; }
+  .hint { display: none; }
+  .card { bottom: calc(76px + env(safe-area-inset-bottom, 0px)); }
+  .where { top: calc(70px + env(safe-area-inset-top, 0px)); }
+  .corner { bottom: calc(76px + env(safe-area-inset-bottom, 0px)); padding: 6px; }
+  #minimap { width: 130px; height: 130px; }
+  .scale { left: var(--gutter-l); bottom: calc(76px + env(safe-area-inset-bottom, 0px)); }
+  .joy { bottom: calc(84px + env(safe-area-inset-bottom, 0px)); }
+}
+@media (max-width: 1100px) {
+  body:has(#card:not([hidden])) .corner { display: none; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+<div id="stage" aria-label="3D model of the building"></div>
+<div id="labels"></div>
+
+<header class="chrome brand" id="brand">
+  <div class="eyebrow">9-storied residential · Sheet A-02</div>
+  <h1>Jannatul Mawa</h1>
+  <p>Basundhara R/A, Halishahar, Chattogram. Three flats per floor, modelled from the typical floor plan.</p>
+</header>
+
+<nav class="chrome modes" aria-label="View mode">
+  <button data-mode="exterior" aria-pressed="true"><svg viewBox="0 0 16 16"><path d="M3 14V4l5-2.5L13 4v10M3 14h10M6 6h1M9 6h1M6 9h1M9 9h1M7 14v-2.5h2V14"/></svg>Exterior</button>
+  <button data-mode="floor" aria-pressed="false"><svg viewBox="0 0 16 16"><path d="M8 2 1.5 5.5 8 9l6.5-3.5zM1.5 9 8 12.5 14.5 9"/></svg>Floor</button>
+  <button data-mode="plan" aria-pressed="false"><svg viewBox="0 0 16 16"><path d="M2 2h12v12H2zM2 8h5M7 2v9M10 8h4M10 8v6"/></svg>Plan</button>
+  <button data-mode="walk" aria-pressed="false"><svg viewBox="0 0 16 16"><circle cx="8.5" cy="2.6" r="1.3"/><path d="m6 15 1.6-5 2 2V15M5 8l1.5-3h3l2 3M7.6 10 8.5 5"/></svg>Walk</button>
+</nav>
+
+<button class="chrome menu-btn" id="menuBtn" aria-label="Show details" aria-expanded="false"><svg viewBox="0 0 20 20"><path d="M3 5h14M3 10h14M3 15h14"/></svg></button>
+
+<aside class="chrome panel" id="panel" aria-label="Floor details">
+  <section id="levelInfo"></section>
+  <section id="commonInfo">
+    <h3>Common core</h3>
+    <div class="common">
+      <span>Staircase</span><span class="d">8'-0" × 16'-6"</span>
+      <span>Lifts (2)</span><span class="d">6'-4" × 6'-0" each</span>
+      <span>Passage</span><span class="d">6'-0" wide</span>
+    </div>
+  </section>
+  <section>
+    <h3>Display</h3>
+    <div class="toggles">
+      <label class="switch" for="optLabels">Room names and sizes <input type="checkbox" id="optLabels" checked></label>
+      <label class="switch" for="optCut">Cut walls at 4'-6" <input type="checkbox" id="optCut" checked></label>
+      <label class="switch" for="optFurniture">Indicative furniture <input type="checkbox" id="optFurniture" checked></label>
+      <div class="sun"><label for="optSun">Sun</label><input type="range" id="optSun" min="6" max="18" step="0.25" value="10.5"><output id="sunOut" for="optSun">10:30</output></div>
+    </div>
+  </section>
+  <section>
+    <p class="note">Keys: <kbd>1</kbd> to <kbd>4</kbd> switch views, <kbd>PgUp</kbd> <kbd>PgDn</kbd> change floor.</p>
+    <p class="note">Walls, doors, windows, columns, stair and room sizes are traced from the architect's AutoCAD sheet A-02 (June 2021) at 1/8" = 1'-0". The drawing shows the typical floor only, so the ground floor (car parking), roof, storey height of 10 ft and furniture are assumptions for illustration.</p>
+  </section>
+</aside>
+
+<div class="chrome where" id="where" hidden></div>
+<div class="chrome card" id="card" hidden role="status"></div>
+<div class="chrome hint" id="hint"></div>
+<div class="chrome tip" id="tip" hidden></div>
+<div class="chrome scale" id="scale" hidden aria-hidden="true"><i id="scaleBar"></i><span id="scaleTxt">10 ft</span></div>
+
+<div class="chrome levels" id="levels" aria-label="Floor"><div class="cap">Level</div></div>
+
+<div class="chrome corner">
+  <canvas id="minimap" width="380" height="380" hidden aria-label="Floor map with your position" title="Click to jump there"></canvas>
+  <div class="compass" title="North"><svg id="needle" viewBox="0 0 30 30"><path d="M15 3 19.5 15h-9z" fill="var(--accent)"/><path d="M15 27 10.5 15h9z" fill="var(--muted)" opacity=".45"/><text x="15" y="15.5" text-anchor="middle" dominant-baseline="middle" font-family="IBM Plex Mono, monospace" font-size="6.5" font-weight="600" fill="var(--accent-ink)">N</text></svg></div>
+</div>
+
+<div class="joy" id="joy" hidden><i></i></div>
+<div class="loading" id="loading">Raising the building…</div>
+
+<script src="model.js"></script>
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+} }
+</script>
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { CSS2DRenderer, CSS2DObject } from 'three/addons/renderers/CSS2DRenderer.js';
+import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
+
+const M = window.MODEL;
+// Units are feet. Storey height is an assumption: the drawing has no section.
+const FH = 10, SLAB = 0.42, SILL = 3, HEAD = 7, TYPICAL = 8, ROOF = 9;
+const EYE = 5.3, RADIUS = 0.8;
+
+const $ = (s) => document.querySelector(s);
+const css = (v) => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+// ---------- geometry helpers ----------
+const W = (r) => r[2] - r[0], D = (r) => r[3] - r[1];
+const along = (r) => W(r) >= D(r);                 // long axis is X
+const overlaps = (a, b, pad = 0) => a[0] < b[2] + pad && a[2] > b[0] - pad && a[1] < b[3] + pad && a[3] > b[1] - pad;
+const clip = (r, b) => [Math.max(r[0], b[0]), Math.max(r[1], b[1]), Math.min(r[2], b[2]), Math.min(r[3], b[3])];
+const grow = (r, p) => [r[0] - p, r[1] - p, r[2] + p, r[3] + p];
+const bbox = (rs) => rs.reduce((a, r) => [Math.min(a[0], r[0]), Math.min(a[1], r[1]), Math.max(a[2], r[2]), Math.max(a[3], r[3])], [1e9, 1e9, -1e9, -1e9]);
+const valid = (r) => W(r) > 0.01 && D(r) > 0.01;
+
+function subtract(rects, hole) {
+  const out = [];
+  for (const r of rects) {
+    if (!overlaps(r, hole)) { out.push(r); continue; }
+    const x0 = Math.max(r[0], hole[0]), x1 = Math.min(r[2], hole[2]);
+    [[r[0], r[1], hole[0], r[3]], [hole[2], r[1], r[2], r[3]], [x0, r[1], x1, hole[1]], [x0, hole[3], x1, r[3]]]
+      .filter(valid).forEach((p) => out.push(p));
+  }
+  return out;
+}
+
+function box(r, y0, y1) {
+  const g = new THREE.BoxGeometry(W(r), y1 - y0, D(r));
+  g.translate((r[0] + r[2]) / 2, (y0 + y1) / 2, (r[1] + r[3]) / 2);
+  return g;
+}
+function plane(r, y, tile) {
+  const g = new THREE.PlaneGeometry(W(r), D(r));
+  g.rotateX(-Math.PI / 2);
+  g.translate((r[0] + r[2]) / 2, y, (r[1] + r[3]) / 2);
+  const p = g.attributes.position, uv = g.attributes.uv;
+  for (let i = 0; i < p.count; i++) uv.setXY(i, p.getX(i) / tile, p.getZ(i) / tile);
+  return g;
+}
+
+function capMesh(rects) {                                       // plan "poche": cut walls drawn solid at the cut height
+  const m = new THREE.Mesh(mergeGeometries(rects.map((r) => plane(r, SLAB + 4.49, 1))), MAT.poche);
+  m.name = 'cap'; m.visible = false;
+  return m;
+}
+
+class Bucket {                                     // collects geometry per material, merges once
+  constructor() { this.m = new Map(); }
+  add(mat, g) { if (!this.m.has(mat)) this.m.set(mat, []); this.m.get(mat).push(g); }
+  into(group, { cast = true, receive = true } = {}) {
+    for (const [mat, gs] of this.m) {
+      const mesh = new THREE.Mesh(mergeGeometries(gs), mat);
+      mesh.castShadow = cast && !mat.transparent; mesh.receiveShadow = receive;
+      group.add(mesh);
+    }
+    return group;
+  }
+}
+
+// ---------- materials ----------
+function canvasTex(draw, size = 256) {
+  const c = document.createElement('canvas'); c.width = c.height = size;
+  draw(c.getContext('2d'), size);
+  const t = new THREE.CanvasTexture(c);
+  t.wrapS = t.wrapT = THREE.RepeatWrapping; t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 8;
+  return t;
+}
+const tiles = (base, grout, n = 1) => canvasTex((x, s) => {
+  x.fillStyle = base; x.fillRect(0, 0, s, s);
+  for (let i = 0; i < 400; i++) { x.fillStyle = `rgba(0,0,0,${Math.random() * 0.025})`; x.fillRect(Math.random() * s, Math.random() * s, 3, 3); }
+  x.strokeStyle = grout; x.lineWidth = 2;
+  for (let i = 0; i <= n; i++) { const p = (i * s) / n; x.beginPath(); x.moveTo(p, 0); x.lineTo(p, s); x.moveTo(0, p); x.lineTo(s, p); x.stroke(); }
+});
+const planks = canvasTex((x, s) => {
+  const cols = ['#c39a6b', '#b98f60', '#c8a273', '#bd955f', '#c09668'];
+  const n = 8, h = s / n;
+  for (let i = 0; i < n; i++) {
+    let off = (i * 97) % s;
+    for (let k = -1; k < 2; k++) {
+      x.fillStyle = cols[(i + k + 5) % cols.length]; x.fillRect(off + k * s * 0.9, i * h, s * 0.9, h);
+    }
+    x.fillStyle = 'rgba(60,40,20,.35)'; x.fillRect(0, i * h, s, 1.5);
+    x.fillRect(off, i * h, 1.5, h);
+  }
+});
+const std = (color, roughness = 0.9, metalness = 0) => new THREE.MeshStandardMaterial({ color, roughness, metalness });
+const MAT = {
+  plaster: std(0xf0ece4, 0.93),
+  concrete: std(0xbdb7ad, 0.95),
+  core: std(0xe4dfd6, 0.95),
+  frame: std(0x30363b, 0.5, 0.4),
+  glass: new THREE.MeshStandardMaterial({ color: 0x86aec4, roughness: 0.05, metalness: 0.3, transparent: true, opacity: 0.3, depthWrite: false }),
+  wood: std(0x9b6b45, 0.65),
+  steel: std(0xaab3ba, 0.35, 0.75),
+  rail: std(0xe9e4da, 0.9),
+  tread: std(0xcfc8bc, 0.8),
+  fabric: std(0xe7e2d8, 1), linen: std(0xf6f4ef, 1), sofa: std(0x6c7a83, 0.95), oak: std(0xa77b51, 0.7),
+  counter: std(0x3a3d41, 0.35), cabinet: std(0xdcd6cc, 0.7), ceramic: std(0xf8f8f6, 0.25), black: std(0x222528, 0.5),
+  poche: new THREE.MeshBasicMaterial({ color: 0x2b3034 }),
+  door: std(0x9a7657, 0.6), doorFrame: std(0x684a35, 0.6), skirting: std(0xcfc7b9, 0.8), ceiling: std(0xf7f5f0, 0.95),
+  lamp: new THREE.MeshBasicMaterial({ color: 0xfff2d6 }), sill: std(0xe2dcd0, 0.45), mirror: std(0xd5dde2, 0.05, 1),
+  pot: std(0xb27e55, 0.85), leaf: std(0x5d7d4c, 0.9, 0), rug: std(0x9c9182, 1), screen: std(0x16191c, 0.25, 0.2),
+  ground: std(0xc9c6b9, 1), plot: std(0xd6d2c9, 0.95), curb: std(0xb5afa4, 0.95),
+};
+const FLOOR = {
+  bed: { map: planks, tile: 6 }, living: { map: tiles('#e9e5de', 'rgba(120,110,95,.35)'), tile: 2 },
+  dining: { map: tiles('#e9e5de', 'rgba(120,110,95,.35)'), tile: 2 }, kitchen: { map: tiles('#dcd8cf', 'rgba(90,85,75,.4)', 2), tile: 2 },
+  bath: { map: tiles('#c3cfd2', 'rgba(70,85,90,.45)', 2), tile: 2 }, balcony: { map: tiles('#cdb9a2', 'rgba(110,80,60,.4)', 2), tile: 2 },
+  lobby: { map: tiles('#d8d4cc', 'rgba(100,95,85,.4)'), tile: 2 }, stair: { map: tiles('#d8d4cc', 'rgba(100,95,85,.4)'), tile: 2 },
+  lift: { map: tiles('#55595d', 'rgba(0,0,0,.4)'), tile: 2 },
+};
+
+// ---------- model facts ----------
+const roomsOf = (k) => M.rooms.filter((r) => r.kind === k);
+const stairRect = bbox(roomsOf('stair')[0].rects);
+const liftRects = roomsOf('lift').map((r) => bbox(r.rects));
+const coreBox = grow(bbox([stairRect, ...liftRects]), 0.75);
+const isStairThing = (r) => overlaps(r, stairRect, -0.2);
+const stairWalls = M.rails.filter(isStairThing);                  // the centre wall between the two flights
+const rails = M.rails.filter((r) => !isStairThing(r));
+const walls = [...M.walls, ...M.beams];                           // the red bar at the stair top is a full-height wall
+const coreWalls = walls.map((r) => clip(r, coreBox)).filter(valid);
+const footBox = bbox(M.footprint);
+const unitColor = (u) => css(`--unit-${u.toLowerCase()}`);
+const flat = (level, u) => `Flat ${level}${u}`;
+const levelName = (l) => (l === 0 ? 'Ground floor' : l === ROOF ? 'Roof' : `Level ${l}`);
+const fmtDim = (d) => (d ? d.replace('X', ' × ') : '');
+const dimArea = (r) => {
+  const m = r.dim && r.dim.match(/(\d+)'-(\d+)"X(\d+)'-(\d+)"/);
+  return m ? (+m[1] + m[2] / 12) * (+m[3] + m[4] / 12) : r.area;
+};
+
+// stair: two flights side by side, risers listed from the floor landing towards the mid landing
+const flights = M.stair.flights.map((f, i) => ({ z0: Math.min(f.a[1], f.b[1]), z1: Math.max(f.a[1], f.b[1]), xs: M.stair.risers[i] }));
+const line0 = Math.max(...flights[0].xs), lineN = Math.min(...flights[0].xs);
+const zSplit = (flights[0].z1 + flights[1].z0) / 2;
+const stairWell = [stairRect[0], stairRect[1], line0, stairRect[3]];   // opening in each slab: flights and mid landing, not the floor landing
+function stairLocal(x, z) {                                      // walking surface above the level's floor
+  if (x >= line0) return 0;
+  if (x <= lineN) return FH / 2;
+  const t = (line0 - x) / (line0 - lineN);
+  return z < zSplit ? t * FH / 2 : FH - t * FH / 2;
+}
+
+// ---------- furniture (indicative, placed against the quietest wall of each room) ----------
+function mainRect(room) {                                        // the room's bounding box when it is close to rectangular
+  const b = bbox(room.rects), fill = room.rects.reduce((s, r) => s + W(r) * D(r), 0) / (W(b) * D(b));
+  return fill > 0.8 ? b : room.rects.reduce((a, r) => (W(r) * D(r) > W(a) * D(a) ? r : a));
+}
+function sideScores(r) {
+  const sides = [
+    { k: 'x0', len: D(r), line: [r[0], r[1], r[0], r[3]] }, { k: 'x1', len: D(r), line: [r[2], r[1], r[2], r[3]] },
+    { k: 'z0', len: W(r), line: [r[0], r[1], r[2], r[1]] }, { k: 'z1', len: W(r), line: [r[0], r[3], r[2], r[3]] },
+  ];
+  for (const s of sides) {
+    s.score = 0;
+    const zone = grow(s.line, 0.9);
+    for (const d of M.doors) if (overlaps(d.o, zone)) s.score += 10;
+    for (const w of M.windows) if (overlaps(w.r, zone)) s.score += w.slider ? 10 : 2;
+  }
+  return sides;
+}
+function placeAgainst(r, side, w, d, slide = 0) {               // rect of size w (along wall) x d (out from wall)
+  const c = side.k[0] === 'x' ? (r[1] + r[3]) / 2 + slide : (r[0] + r[2]) / 2 + slide;
+  if (side.k === 'x0') return [r[0], c - w / 2, r[0] + d, c + w / 2];
+  if (side.k === 'x1') return [r[2] - d, c - w / 2, r[2], c + w / 2];
+  if (side.k === 'z0') return [c - w / 2, r[1], c + w / 2, r[1] + d];
+  return [c - w / 2, r[3] - d, c + w / 2, r[3]];
+}
+function hitsDoorSwing(f) {
+  return M.doors.some((d) => {
+    const cx = Math.max(f[0], Math.min(d.h[0], f[2])), cz = Math.max(f[1], Math.min(d.h[1], f[3]));
+    return Math.hypot(cx - d.h[0], cz - d.h[1]) < d.w + 0.15;
+  });
+}
+function fitAgainst(r, sides, w, d) {
+  const order = [...sides].sort((a, b) => a.score - b.score || b.len - a.len);
+  for (const side of order) {
+    if (side.len < w + 0.5) continue;
+    const room = side.k[0] === 'x' ? W(r) : D(r);
+    if (room < d + 2) continue;
+    const span = (side.len - w) / 2;
+    for (const s of [0, -span, span, -span / 2, span / 2]) {
+      const f = placeAgainst(r, side, w, d, s);
+      if (!hitsDoorSwing(f)) return { f, side };
+    }
+  }
+  return null;
+}
+function inward(side, f, depth) {                                // rect in front of f, `depth` deep
+  if (side.k === 'x0') return [f[2], f[1], f[2] + depth, f[3]];
+  if (side.k === 'x1') return [f[0] - depth, f[1], f[0], f[3]];
+  if (side.k === 'z0') return [f[0], f[3], f[2], f[3] + depth];
+  return [f[0], f[1] - depth, f[2], f[1]];
+}
+function strip(side, f, t, fromWall = true) {                    // thin band of f along its wall (or far edge)
+  const k = side.k;
+  if (k === 'x0') return fromWall ? [f[0], f[1], f[0] + t, f[3]] : [f[2] - t, f[1], f[2], f[3]];
+  if (k === 'x1') return fromWall ? [f[2] - t, f[1], f[2], f[3]] : [f[0], f[1], f[0] + t, f[3]];
+  if (k === 'z0') return fromWall ? [f[0], f[1], f[2], f[1] + t] : [f[0], f[3] - t, f[2], f[3]];
+  return fromWall ? [f[0], f[3] - t, f[2], f[3]] : [f[0], f[1], f[2], f[1] + t];
+}
+function besideBed(p, r, s) {                                   // bedside tables at both ends of the headboard
+  const f = p.f, out = [], x = p.side.k[0] === 'x';
+  const head = strip(p.side, f, s);
+  for (const e of [-1, 1]) {
+    const t = x ? [head[0], e < 0 ? f[1] - s - 0.15 : f[3] + 0.15, head[2], e < 0 ? f[1] - 0.15 : f[3] + s + 0.15]
+                : [e < 0 ? f[0] - s - 0.15 : f[2] + 0.15, head[1], e < 0 ? f[0] - 0.15 : f[2] + s + 0.15, head[3]];
+    if (t[0] >= r[0] && t[1] >= r[1] && t[2] <= r[2] && t[3] <= r[3] && !hitsDoorSwing(t)) out.push(t);
+  }
+  return out;
+}
+function furnish(B, y, blockers) {
+  const add = (mat, r, y0, y1) => B.add(mat, box(r, y + y0, y + y1));
+  for (const room of M.rooms) {
+    const r = mainRect(room), sides = sideScores(r);
+    if (room.kind === 'bed') {
+      const master = room.code === 'M.BED', bw = master ? 6 : 4.5;
+      const p = fitAgainst(r, sides, bw, 6.8); if (!p) continue;
+      add(MAT.oak, p.f, 0, 1.1); add(MAT.linen, grow(p.f, -0.12), 1.1, 1.75);
+      add(MAT.oak, strip(p.side, p.f, 0.25), 0, 3.4);
+      const pil = strip(p.side, grow(p.f, -0.35), 1.2); add(MAT.fabric, pil, 1.75, 2.0);
+      const throwR = strip(p.side, p.f, 2.2, false); add(MAT.sofa, grow(throwR, -0.05), 1.12, 1.8);
+      blockers.push(p.f);
+      for (const t of besideBed(p, r, 1.5)) { add(MAT.oak, t, 0, 1.9); add(MAT.linen, grow(t, -0.45), 1.9, 2.7); blockers.push(t); }
+      // wardrobe on the next quietest wall
+      const rest = sides.filter((s) => s.k !== p.side.k && s.score === 0);
+      const q = rest.length && fitAgainst(r, rest, Math.min(5, rest[0].len - 1), 2);
+      if (q && !overlaps(q.f, p.f, 0.5)) { add(MAT.cabinet, q.f, 0, 7); blockers.push(q.f); }
+    } else if (room.kind === 'living') {
+      const p = fitAgainst(r, sides, 7, 3); if (!p) continue;
+      add(MAT.sofa, p.f, 0, 1.4); add(MAT.sofa, strip(p.side, p.f, 0.8), 1.4, 2.7);
+      const coffee = strip(p.side, inward(p.side, p.f, 3.6), 1.8, false);
+      add(MAT.oak, grow(coffee, -0.6), 0, 1.3);
+      add(MAT.rug, grow(coffee, 1.2), 0, 0.03);
+      blockers.push(p.f, grow(coffee, -0.6));
+      const opposite = sides.find((x) => x.k === { x0: 'x1', x1: 'x0', z0: 'z1', z1: 'z0' }[p.side.k]);
+      const tv = fitAgainst(r, [opposite], 5, 1.4);
+      if (tv) {
+        add(MAT.oak, tv.f, 0, 1.6);
+        add(MAT.screen, grow(strip(tv.side, tv.f, 0.12), -0.35), 2.4, 4.9);
+        blockers.push(tv.f);
+      }
+    } else if (room.kind === 'kitchen') {
+      // counters are drawn on the plan; hob on the shorter run, sink on the longer, wall cabinets where no window
+      const runs = M.counters.filter((c) => overlaps(c, r, -0.3)).sort((a, b) => Math.max(W(b), D(b)) - Math.max(W(a), D(a)));
+      runs.forEach((c, i) => {
+        add(MAT.cabinet, c, 0, 2.75); add(MAT.counter, c, 2.75, 2.9); blockers.push(c);
+        const lx = W(c) >= D(c), mid = lx ? (c[0] + c[2]) / 2 : (c[1] + c[3]) / 2, half = i === 0 ? 0.9 : 1.1;
+        const spot = lx ? [mid - half, c[1] + 0.3, mid + half, c[3] - 0.3] : [c[0] + 0.3, mid - half, c[2] - 0.3, mid + half];
+        add(i === 0 ? MAT.steel : MAT.black, spot, 2.9, 2.94);
+        const wallSide = lx ? (c[1] - r[1] < r[3] - c[3] ? 'z0' : 'z1') : (c[0] - r[0] < r[2] - c[2] ? 'x0' : 'x1');
+        const upper = strip({ k: wallSide }, c, 1.1);
+        if (!M.windows.some((w) => overlaps(w.r, grow(upper, 0.6)))) add(MAT.cabinet, upper, 4.7, 6.9);
+      });
+    } else if (room.kind === 'bath') {
+      const far = [...sides].sort((a, b) => a.score - b.score || a.len - b.len)[0];
+      if (!far) continue;
+      const wc = placeAgainst(r, far, 1.3, 2.2);
+      add(MAT.ceramic, grow(strip(far, wc, 1.6, false), -0.08), 0, 1.35); add(MAT.ceramic, strip(far, wc, 0.6), 0, 2.6);
+      blockers.push(wc);
+      const b = fitAgainst(r, sides.filter((x) => x.k !== far.k), 1.7, 1.4);
+      if (b && !overlaps(b.f, wc, 0.2)) {
+        add(MAT.ceramic, b.f, 2.4, 2.85); add(MAT.ceramic, grow(strip(b.side, b.f, 0.5), -0.5), 0, 2.4);
+        add(MAT.mirror, grow(strip(b.side, b.f, 0.05), -0.1), 3.6, 5.6);
+        blockers.push(b.f);
+      }
+    } else if (room.kind === 'balcony') {
+      const lx = W(r) >= D(r);
+      for (const e of [0, 1]) {                                  // a plant at each end of the balcony
+        const c = lx ? [e ? r[2] - 0.9 : r[0] + 0.9, (r[1] + r[3]) / 2] : [(r[0] + r[2]) / 2, e ? r[3] - 0.9 : r[1] + 0.9];
+        if (Math.min(W(r), D(r)) < 2) continue;
+        B.add(MAT.pot, new THREE.CylinderGeometry(0.5, 0.38, 1.1, 14).translate(c[0], y + 0.55, c[1]));
+        B.add(MAT.leaf, new THREE.IcosahedronGeometry(0.85, 1).scale(1, 1.25, 1).translate(c[0], y + 1.95, c[1]));
+        blockers.push([c[0] - 0.5, c[1] - 0.5, c[0] + 0.5, c[1] + 0.5]);
+      }
+    }
+  }
+  for (const t of M.tables) {                                    // dining tables are drawn on the plan
+    add(MAT.oak, t, 2.4, 2.55);
+    for (const [cx, cz] of [[t[0] + 0.2, t[1] + 0.2], [t[2] - 0.2, t[1] + 0.2], [t[0] + 0.2, t[3] - 0.2], [t[2] - 0.2, t[3] - 0.2]])
+      add(MAT.oak, [cx - 0.08, cz - 0.08, cx + 0.08, cz + 0.08], 0, 2.4);
+    const longX = W(t) >= D(t), n = 3;
+    for (let i = 0; i < n; i++) for (const side of [-1, 1]) {
+      const a = (i + 0.5) / n;
+      const c = longX ? [t[0] + a * W(t), side < 0 ? t[1] - 0.8 : t[3] + 0.8] : [side < 0 ? t[0] - 0.8 : t[2] + 0.8, t[1] + a * D(t)];
+      const seat = [c[0] - 0.75, c[1] - 0.75, c[0] + 0.75, c[1] + 0.75];
+      add(MAT.fabric, seat, 1.4, 1.55); add(MAT.oak, grow(seat, -0.55), 0, 1.4);
+      const back = longX ? (side < 0 ? [seat[0], seat[1], seat[2], seat[1] + 0.12] : [seat[0], seat[3] - 0.12, seat[2], seat[3]])
+                         : (side < 0 ? [seat[0], seat[1], seat[0] + 0.12, seat[3]] : [seat[2] - 0.12, seat[1], seat[2], seat[3]]);
+      add(MAT.oak, back, 1.55, 3.0);
+    }
+    blockers.push(grow(t, 0.3));
+  }
+}
+
+// ---------- build ----------
+const scene = new THREE.Scene();
+const roomMeshes = [];                                           // [level] -> meshes
+const blockersBy = [];                                           // [level] -> rects for walking
+
+function windowParts(B, w, y) {
+  const r = w.r, horiz = along(r), y0 = y + SLAB, top = y + FH;
+  const sill = w.slider ? 0 : SILL;
+  if (sill) B.add(MAT.plaster, box(r, y0, y0 + sill));
+  B.add(MAT.plaster, box(r, y0 + HEAD, top));
+  const mid = horiz ? (r[1] + r[3]) / 2 : (r[0] + r[2]) / 2;
+  const pane = horiz ? [r[0], mid - 0.03, r[2], mid + 0.03] : [mid - 0.03, r[1], mid + 0.03, r[3]];
+  B.add(MAT.glass, box(pane, y0 + sill, y0 + HEAD));
+  const fd = 0.12, fw = 0.16, len = horiz ? W(r) : D(r);
+  const bar = (a0, a1) => (horiz ? [r[0] + a0, mid - fd, r[0] + a1, mid + fd] : [mid - fd, r[1] + a0, mid + fd, r[1] + a1]);
+  B.add(MAT.frame, box(bar(0, len), y0 + sill, y0 + sill + fw));
+  B.add(MAT.frame, box(bar(0, len), y0 + HEAD - fw, y0 + HEAD));
+  const n = Math.max(1, Math.round(len / (w.slider ? 3 : 2.5)));
+  for (let i = 0; i <= n; i++) {
+    const a = Math.min(len - fw, Math.max(0, (i * len) / n - fw / 2));
+    B.add(MAT.frame, box(bar(a, a + fw), y0 + sill, y0 + HEAD));
+  }
+}
+
+function buildTypical() {
+  const g = new THREE.Group(), B = new Bucket(), y = 0, y0 = SLAB, y1 = FH;
+  let slab = M.footprint;
+  for (const h of [stairWell, ...liftRects]) slab = subtract(slab, h);
+  slab.forEach((r) => B.add(MAT.concrete, box(r, 0, SLAB)));
+  walls.forEach((r) => B.add(MAT.plaster, box(r, y0, y1)));
+  M.columns.forEach((r) => B.add(MAT.plaster, box(r, y0, y1)));
+  M.windows.forEach((w) => windowParts(B, w, y));
+  for (const w of M.windows) {                                   // window sill, projecting both sides
+    if (w.slider) continue;
+    const r = w.r, lx = along(r);
+    B.add(MAT.sill, box(lx ? [r[0] - 0.15, r[1] - 0.18, r[2] + 0.15, r[3] + 0.18] : [r[0] - 0.18, r[1] - 0.15, r[2] + 0.18, r[3] + 0.15], y0 + SILL - 0.02, y0 + SILL + 0.08));
+  }
+  for (const d of M.doors) {
+    B.add(MAT.plaster, box(d.o, y0 + HEAD, y1));
+    const o = d.o, lx = Math.abs(d.s[0]) > 0.5, j = 0.18, e = 0.06;
+    const jambs = lx ? [[o[0], o[1] - e, o[0] + j, o[3] + e], [o[2] - j, o[1] - e, o[2], o[3] + e]] : [[o[0] - e, o[1], o[2] + e, o[1] + j], [o[0] - e, o[3] - j, o[2] + e, o[3]]];
+    jambs.forEach((q) => B.add(MAT.doorFrame, box(q, y0, y0 + HEAD)));
+    B.add(MAT.doorFrame, box(lx ? [o[0], o[1] - e, o[2], o[3] + e] : [o[0] - e, o[1], o[2] + e, o[3]], y0 + HEAD - j, y0 + HEAD));
+  }
+  walls.forEach((r) => B.add(MAT.skirting, box(grow(r, 0.04), y0, y0 + 0.33)));
+  for (const room of M.rooms) {
+    if (room.kind === 'lift') continue;
+    room.rects.forEach((r) => B.add(MAT.ceiling, ceiling(r, y1 - 0.01)));
+    if (room.kind === 'balcony') continue;
+    const m = mainRect(room), c = [(m[0] + m[2]) / 2, (m[1] + m[3]) / 2];
+    B.add(MAT.lamp, new THREE.CircleGeometry(room.kind === 'bath' ? 0.35 : 0.55, 24).rotateX(Math.PI / 2).translate(c[0], y1 - 0.04, c[1]));
+  }
+  for (const r of M.liftDoors) {
+    B.add(MAT.plaster, box(r, y0 + HEAD, y1));
+    const mid = (r[1] + r[3]) / 2;
+    B.add(MAT.steel, box([r[0], mid - 0.1, r[2], mid + 0.1], y0, y0 + HEAD));
+  }
+  rails.forEach((r) => B.add(MAT.rail, box(r, y0, y0 + 3.4)));
+  stairWalls.forEach((r) => B.add(MAT.core, box(r, y0, y1)));
+  buildStair(B, 0);
+  const blockers = [...walls, ...M.columns, ...M.windows.filter((w) => !w.slider).map((w) => w.r), ...rails, ...stairWalls, ...M.liftDoors];
+  const FB = new Bucket();
+  furnish(FB, SLAB, blockers);
+  B.into(g);
+  g.add(capMesh([...walls, ...M.columns, ...stairWalls, ...M.liftDoors.map((r) => [r[0], (r[1] + r[3]) / 2 - 0.1, r[2], (r[1] + r[3]) / 2 + 0.1])]));
+  const furn = FB.into(new THREE.Group()); furn.name = 'furniture'; g.add(furn);
+  M.doors.forEach((d) => g.add(doorMesh(d)));
+  return { g, blockers };
+}
+
+const KNOB = new THREE.BoxGeometry(0.09, 0.09, 0.36);
+const wrap = (a) => Math.atan2(Math.sin(a), Math.cos(a));
+function doorMesh(d) {                                           // a leaf hinged at d.h that swings between closed (along s) and open (along u)
+  const w = d.w - 0.36, t = 0.13, h = HEAD - 0.06;
+  const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, t).translate(w / 2, h / 2, 0), MAT.door);
+  const knob = new THREE.Mesh(KNOB, MAT.steel); knob.position.set(w - 0.3, 3.4, 0); m.add(knob);
+  const jamb = 0.18, ang = (v) => Math.atan2(-v[1], v[0]);
+  m.position.set(d.h[0] + d.s[0] * jamb, SLAB, d.h[1] + d.s[1] * jamb);
+  const closed = ang(d.s), open = ang(d.u);
+  m.userData.door = { closed, delta: wrap(open - closed), t: 1, c: [(d.o[0] + d.o[2]) / 2, (d.o[1] + d.o[3]) / 2] };
+  m.rotation.y = open; m.receiveShadow = true;
+  return m;
+}
+function ceiling(r, y) {
+  const g = new THREE.PlaneGeometry(W(r), D(r));
+  g.rotateX(Math.PI / 2);
+  return g.translate((r[0] + r[2]) / 2, y, (r[1] + r[3]) / 2);
+}
+
+function buildStair(B, y) {
+  const n = flights[0].xs.length, h = FH / 2 / n, base = y + SLAB;
+  flights.forEach((f, fi) => {
+    const xs = [...f.xs].sort((a, b) => b - a);                  // from the floor landing inwards
+    for (let k = 0; k < n - 1; k++) {
+      const top = fi === 0 ? base + (k + 1) * h : base + FH - (k + 1) * h;
+      B.add(MAT.tread, box([xs[k + 1], f.z0, xs[k], f.z1], top - 0.9, top));
+    }
+  });
+  B.add(MAT.tread, box([stairRect[0], stairRect[1], lineN, stairRect[3]], base + FH / 2 - 0.5, base + FH / 2));
+}
+
+function buildGround() {
+  const g = new THREE.Group(), B = new Bucket(), y0 = SLAB, y1 = FH;
+  M.footprint.forEach((r) => B.add(MAT.concrete, box(r, 0, SLAB)));
+  M.columns.forEach((r) => B.add(MAT.plaster, box(r, y0, y1)));
+  coreWalls.forEach((r) => B.add(MAT.core, box(r, y0, y1)));
+  stairWalls.forEach((r) => B.add(MAT.core, box(r, y0, y1)));
+  for (const r of M.liftDoors) {
+    B.add(MAT.core, box(r, y0 + HEAD, y1));
+    const mid = (r[1] + r[3]) / 2;
+    B.add(MAT.steel, box([r[0], mid - 0.1, r[2], mid + 0.1], y0, y0 + HEAD));
+  }
+  buildStair(B, 0);
+  B.into(g).add(capMesh([...coreWalls, ...M.columns, ...stairWalls]));
+  return { g, blockers: [...coreWalls, ...M.columns, ...stairWalls, ...M.liftDoors] };
+}
+
+function buildRoof() {
+  const g = new THREE.Group(), B = new Bucket(), y0 = SLAB;
+  let slab = M.footprint;
+  for (const h of [stairWell, ...liftRects]) slab = subtract(slab, h);
+  slab.forEach((r) => B.add(MAT.concrete, box(r, 0, SLAB)));
+  M.perimeter.forEach((r) => B.add(MAT.plaster, box(r, y0, y0 + 3.5)));
+  coreWalls.forEach((r) => B.add(MAT.core, box(r, y0, FH)));
+  B.add(MAT.concrete, box(coreBox, FH, FH + SLAB));
+  B.add(MAT.core, box(grow(liftRects.reduce((a, r) => bbox([a, r])), 0.4), FH + SLAB, FH + 4));   // lift machine room
+  B.add(MAT.concrete, box(grow([stairRect[0], stairRect[1], stairRect[0] + 9, stairRect[3]], -0.3), FH + SLAB, FH + 5.5)); // water tank
+  return { g: B.into(g), blockers: [...M.perimeter, ...coreWalls] };
+}
+
+function buildRoomFloors(level, y) {
+  const list = [];
+  for (const room of M.rooms) {
+    const spec = FLOOR[room.kind];
+    const geo = mergeGeometries(room.rects.map((r) => plane(r, y + SLAB + 0.01, spec.tile)));
+    const mesh = new THREE.Mesh(geo, new THREE.MeshStandardMaterial({ map: spec.map, roughness: 0.75, color: 0xffffff }));
+    mesh.receiveShadow = true;
+    mesh.userData = { room, level };
+    list.push(mesh);
+  }
+  return list;
+}
+
+function buildSite() {
+  const g = new THREE.Group();
+  const ground = new THREE.Mesh(new THREE.CircleGeometry(900, 64).rotateX(-Math.PI / 2), MAT.ground);
+  ground.position.y = -0.02; ground.receiveShadow = true; g.add(ground);
+  const shape = new THREE.Shape(M.plot.map(([x, z]) => new THREE.Vector2(x, -z)));
+  const plot = new THREE.Mesh(new THREE.ShapeGeometry(shape).rotateX(-Math.PI / 2), MAT.plot);
+  plot.position.y = 0.01; plot.receiveShadow = true; g.add(plot);
+  const B = new Bucket();
+  M.plot.forEach((p, i) => {                                     // low edge along the plot line from the drawing
+    const q = M.plot[(i + 1) % M.plot.length], len = Math.hypot(q[0] - p[0], q[1] - p[1]);
+    if (len < 0.5) return;
+    const geo = new THREE.BoxGeometry(len, 1.2, 0.5);
+    geo.rotateY(-Math.atan2(q[1] - p[1], q[0] - p[0]));
+    geo.translate((p[0] + q[0]) / 2, 0.6, (p[1] + q[1]) / 2);
+    B.add(MAT.curb, geo);
+  });
+  return B.into(g);
+}
+
+const levels = [], doorsBy = [];
+function build() {
+  scene.add(buildSite());
+  const ground = buildGround();
+  const typical = buildTypical();
+  const roof = buildRoof();
+  for (let l = 0; l <= ROOF; l++) {
+    const src = l === 0 ? ground : l === ROOF ? roof : typical;
+    const g = l === 0 || l === ROOF ? src.g : src.g.clone();
+    g.position.y = l * FH;
+    const rooms = l >= 1 && l <= TYPICAL ? buildRoomFloors(l, 0) : [];
+    rooms.forEach((m) => g.add(m));
+    if (l === 0) {
+      const core = M.rooms.filter((r) => ['stair', 'lift'].includes(r.kind));
+      buildRoomFloorsFor(core, g, l);
+    }
+    roomMeshes[l] = rooms;
+    blockersBy[l] = src.blockers;
+    doorsBy[l] = [];
+    g.traverse((o) => { if (o.userData.door) doorsBy[l].push(o); });
+    scene.add(g);
+    levels[l] = g;
+  }
+  // invisible shell for hovering floors from outside, and the band that marks the hovered floor
+  proxy = new THREE.Mesh(mergeGeometries(M.footprint.map((r) => box(r, 0, ROOF * FH + SLAB + 3.5))), new THREE.MeshBasicMaterial({ visible: false }));
+  band = new THREE.Mesh(mergeGeometries(M.footprint.map((r) => box(grow(r, 0.3), 0.05, FH - 0.05))),
+    new THREE.MeshBasicMaterial({ color: css('--accent'), transparent: true, opacity: 0.2, depthWrite: false }));
+  band.visible = false;
+  ring = new THREE.Mesh(new THREE.RingGeometry(0.5, 0.72, 40).rotateX(-Math.PI / 2), new THREE.MeshBasicMaterial({ color: css('--accent'), transparent: true, opacity: 0.85, depthWrite: false }));
+  ring.visible = false;
+  scene.add(proxy, band, ring);
+}
+let proxy, band, ring;
+function buildRoomFloorsFor(rooms, g, level) {
+  for (const room of rooms) {
+    const spec = FLOOR[room.kind];
+    const m = new THREE.Mesh(mergeGeometries(room.rects.map((r) => plane(r, SLAB + 0.01, spec.tile))), new THREE.MeshStandardMaterial({ map: spec.map, roughness: 0.8 }));
+    m.receiveShadow = true; g.add(m);
+  }
+}
+
+// ---------- renderer, lights, camera ----------
+const stage = $('#stage');
+let renderer;
+try { renderer = new THREE.WebGLRenderer({ antialias: true }); }
+catch (err) {
+  $('#loading').textContent = 'This browser cannot show 3D graphics (WebGL is off). Try a current Chrome, Edge, Firefox or Safari.';
+  throw err;
+}
+renderer.setPixelRatio(Math.min(devicePixelRatio, 1.75));
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.shadowMap.autoUpdate = false;                           // the sun only moves when asked, so redraw shadows on change
+const refreshShadows = () => { renderer.shadowMap.needsUpdate = true; };
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.05;
+// floor and plan views cut the active level like an architectural plan, at 4'-6" above the floor
+const cut = new THREE.Plane(new THREE.Vector3(0, -1, 0), 0);
+renderer.clippingPlanes = [];
+stage.appendChild(renderer.domElement);
+const labelRenderer = new CSS2DRenderer({ element: $('#labels') });
+
+const camera = new THREE.PerspectiveCamera(42, 1, 0.3, 4000);
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true; controls.dampingFactor = 0.08;
+controls.maxPolarAngle = Math.PI / 2 - 0.03; controls.minDistance = 8; controls.maxDistance = 600;
+controls.screenSpacePanning = true;
+
+const hemi = new THREE.HemisphereLight(0xe8f0f7, 0xd3ccc0, 1.25);
+const sun = new THREE.DirectionalLight(0xfff4e2, 2.4);
+sun.castShadow = true;
+sun.shadow.mapSize.set(2048, 2048);
+Object.assign(sun.shadow.camera, { left: -80, right: 80, top: 80, bottom: -80, near: 1, far: 500 });
+sun.shadow.bias = -0.0004; sun.shadow.normalBias = 0.04;
+sun.target.position.set(0, 40, 0);
+// a soft light that travels with you indoors, so rooms read with depth instead of flat ambient
+const lamp = new THREE.PointLight(0xfff1dc, 0, 38, 1.2);
+scene.add(hemi, sun, sun.target, lamp);
+
+function setSun(hour) {                                          // equinox sun over Chattogram, 22.3° N
+  const lat = THREE.MathUtils.degToRad(22.3), H = THREE.MathUtils.degToRad((hour - 12) * 15);
+  const el = Math.asin(Math.cos(lat) * Math.cos(H));
+  const az = Math.atan2(Math.sin(H), Math.cos(H) * Math.sin(lat)) + Math.PI;      // from north, clockwise
+  const dir = new THREE.Vector3(Math.sin(az) * Math.cos(el), Math.max(Math.sin(el), 0.05), -Math.cos(az) * Math.cos(el));
+  sun.position.copy(dir.multiplyScalar(260)).add(sun.target.position);
+  const low = 1 - Math.min(1, Math.sin(el) / 0.5);
+  sun.color.setHSL(0.09, 0.6 * low + 0.15, 0.92 - low * 0.12);
+  sun.intensity = 1.2 + 1.4 * Math.min(1, Math.sin(el) * 2);
+  refreshShadows();
+  const hh = Math.floor(hour), mm = Math.round((hour - hh) * 60);
+  $('#sunOut').value = `${String(hh).padStart(2, '0')}:${String(mm).padStart(2, '0')}`;
+}
+
+function applyTheme() {
+  const sky = new THREE.Color(css('--sky'));
+  scene.background = sky;
+  scene.fog = new THREE.Fog(sky, 380, 1100);
+}
+
+// ---------- labels ----------
+const labelGroup = new THREE.Group(); scene.add(labelGroup);
+const labelEls = [];
+for (const room of M.rooms) {
+  if (room.kind === 'lift' && room !== roomsOf('lift')[0]) continue;
+  const el = document.createElement('div');
+  el.className = `label${room.unit ? ` unit-${room.unit.toLowerCase()}` : ''}`;
+  el.dataset.small = String(['bath', 'balcony'].includes(room.kind));
+  const name = room.kind === 'lift' ? 'Lifts' : room.name;
+  el.innerHTML = `<b>${name}</b><small>${room.kind === 'lift' ? '2 × ' : ''}${fmtDim(room.dim) || (room.inferred ? 'size not given' : '')}</small>`;
+  el.addEventListener('click', (e) => { e.stopPropagation(); select(room); });
+  const obj = new CSS2DObject(el);
+  const at = room.kind === 'lift' ? [(liftRects[0][0] + liftRects[1][2]) / 2, (liftRects[0][1] + liftRects[0][3]) / 2] : room.at;
+  obj.position.set(at[0], SLAB + 0.6, at[1]);
+  obj.userData.room = room;
+  labelGroup.add(obj); labelEls.push(el);
+}
+const groundLabel = (() => {
+  const el = document.createElement('div'); el.className = 'label'; el.innerHTML = '<b>Car parking</b><small>assumed, not in drawing</small>';
+  const o = new CSS2DObject(el); o.position.set(10, SLAB + 0.6, -10); return o;
+})();
+scene.add(groundLabel);
+
+// ---------- state ----------
+const state = { mode: 'exterior', level: 3, unit: null, selected: null, hovered: null, labels: true, furniture: true, cut: true };
+const levelBtns = [];
+
+function buildLevelButtons() {
+  const box_ = $('#levels');
+  for (let l = ROOF; l >= 0; l--) {
+    const b = document.createElement('button');
+    b.textContent = l === ROOF ? 'R' : l === 0 ? 'G' : String(l);
+    b.title = levelName(l);
+    b.setAttribute('aria-label', levelName(l));
+    if (l === ROOF) b.className = 'roof';
+    if (l === 0) b.className = 'ground';
+    b.addEventListener('click', () => { setLevel(l); if (state.mode === 'exterior') setMode('floor'); else if (state.mode === 'walk') startWalk(); });
+    box_.appendChild(b); levelBtns[l] = b;
+  }
+}
+
+function renderLevelInfo() {
+  const l = state.level, host = $('#levelInfo');
+  if (l === 0) {
+    host.innerHTML = `<h2>Ground floor</h2><p class="lede">Open car parking between the structural columns, with the stair and two lifts rising from here. The drawing does not include a ground floor plan, so only the columns and the core are shown.</p>`;
+    return;
+  }
+  if (l === ROOF) {
+    host.innerHTML = `<h2>Roof</h2><p class="lede">Open roof with a 3'-6" parapet, the stair head room, lift machine room and an overhead water tank. Shown for context: the drawing does not detail the roof.</p>`;
+    return;
+  }
+  const units = Object.keys(M.units).sort();
+  host.innerHTML = `<h2>${levelName(l)}</h2><p class="lede">Typical floor. ${units.length} flats around a common passage, stair and two lifts. Choose a flat to see its rooms.</p><div class="units"></div>`;
+  const list = host.querySelector('.units');
+  for (const u of units) {
+    const rs = M.rooms.filter((r) => r.unit === u);
+    const beds = rs.filter((r) => r.kind === 'bed').length, baths = rs.filter((r) => r.kind === 'bath').length, balc = rs.filter((r) => r.kind === 'balcony').length;
+    const el = document.createElement('div');
+    el.className = 'unit'; el.style.setProperty('--c', unitColor(u)); el.dataset.open = String(state.unit === u);
+    el.innerHTML = `<button aria-expanded="${state.unit === u}"><span class="sw"></span><span><div class="nm">${flat(l, u)} <span style="color:var(--muted);font-weight:400">· Type ${u}</span></div><div class="meta">${beds} bed · ${baths} bath · ${balc} balconies</div></span><span class="sft">${M.units[u].sft.toLocaleString()} sft</span></button><ul class="rooms"></ul>`;
+    el.querySelector('button').addEventListener('click', () => setUnit(state.unit === u ? null : u));
+    const order = ['living', 'dining', 'kitchen', 'bed', 'bath', 'balcony'];
+    const ul = el.querySelector('.rooms');
+    rs.sort((a, b) => order.indexOf(a.kind) - order.indexOf(b.kind) || (b.code === 'M.BED') - (a.code === 'M.BED'));
+    for (const r of rs) {
+      const li = document.createElement('li');
+      li.innerHTML = `<button aria-current="${state.selected === r}"><span>${r.name}</span><span class="d">${fmtDim(r.dim) || `≈ ${Math.round(r.area)} sft`}</span></button>`;
+      li.firstChild.addEventListener('click', () => select(r, true));
+      li.firstChild.addEventListener('mouseenter', () => setHover(meshFor(r)));
+      li.firstChild.addEventListener('mouseleave', () => setHover(null));
+      ul.appendChild(li);
+    }
+    const living = rs.find((r) => r.kind === 'living');
+    if (living) {
+      const li = document.createElement('li');
+      li.innerHTML = `<button class="walkin">${WALK_ICON}Walk inside ${flat(l, u)}</button>`;
+      li.firstChild.addEventListener('click', () => walkInto(living));
+      ul.appendChild(li);
+    }
+    list.appendChild(el);
+  }
+}
+
+const WALK_ICON = '<svg viewBox="0 0 16 16"><circle cx="8.5" cy="2.6" r="1.3"/><path d="m6 15 1.6-5 2 2V15M5 8l1.5-3h3l2 3M7.6 10 8.5 5"/></svg>';
+const meshFor = (room, l = state.level) => (roomMeshes[l] || []).find((m) => m.userData.room === room) || null;
+
+function paintRooms() {
+  for (let l = 1; l <= TYPICAL; l++) for (const m of roomMeshes[l]) {
+    const r = m.userData.room, mat = m.material;
+    const tint = state.unit && r.unit === state.unit && l === state.level;
+    mat.color.set(tint ? new THREE.Color(unitColor(r.unit)).lerp(new THREE.Color(0xffffff), 0.45) : 0xffffff);
+    const sel = state.selected === r && l === state.level, hov = state.hovered === m;
+    mat.emissive.set(sel ? new THREE.Color(css('--accent')) : hov ? 0xffffff : 0x000000);
+    mat.emissiveIntensity = sel ? 0.28 : hov ? 0.12 : 0;
+  }
+  labelEls.forEach((el, i) => {
+    const r = labelGroup.children[i].userData.room;
+    el.classList.toggle('dim', !!state.unit && r.unit !== state.unit);
+  });
+}
+
+function setHover(mesh) {
+  if (state.hovered === mesh) return;
+  state.hovered = mesh;
+  renderer.domElement.style.cursor = mesh ? 'pointer' : '';
+  paintRooms();
+}
+
+function setUnit(u) {
+  state.unit = u;
+  renderLevelInfo(); paintRooms();
+  if (u && state.mode !== 'walk') {
+    const b = bbox(M.rooms.filter((r) => r.unit === u).flatMap((r) => r.rects));
+    focusOn([(b[0] + b[2]) / 2, (b[1] + b[3]) / 2], 70);
+  }
+}
+
+function select(room, fly = false) {
+  state.selected = room;
+  if (room && room.unit && state.unit !== room.unit) state.unit = room.unit;
+  renderLevelInfo(); paintRooms(); renderCard();
+  if (room && innerWidth <= 1100) { $('#panel').classList.remove('open'); $('#menuBtn').setAttribute('aria-expanded', 'false'); }
+  if (room && (fly || state.mode !== 'walk')) {
+    if (state.mode === 'exterior') setMode('floor', false);
+    focusOn(room.at, room.kind === 'bath' || room.kind === 'balcony' ? 28 : 38);
+  }
+}
+
+function renderCard() {
+  const r = state.selected, card = $('#card');
+  card.hidden = !r;
+  if (!r) return;
+  const l = state.level;
+  const area = dimArea(r), where = r.unit ? `${flat(l, r.unit)} · Type ${r.unit}` : `Common area · ${levelName(l)}`;
+  const size = r.kind === 'lift' ? `2 × ${fmtDim(r.dim)}` : fmtDim(r.dim) || 'not given on drawing';
+  card.innerHTML = `<div><div class="t">${r.name}</div><div class="s">${where}</div></div>
+    <button class="x" aria-label="Close room details"><svg width="14" height="14" viewBox="0 0 14 14" stroke="currentColor" stroke-width="1.6"><path d="M3 3l8 8M11 3l-8 8"/></svg></button>
+    <dl><div><dt>Size</dt><dd>${size}</dd></div><div><dt>Area</dt><dd>${Math.round(area)} sft</dd></div><div><dt>Metric</dt><dd>${(area * 0.092903).toFixed(1)} m²</dd></div></dl>
+    ${r.kind !== 'lift' ? `<div class="actions"><button class="btn primary" data-act="walk">${WALK_ICON}Walk in</button></div>` : ''}`;
+  card.querySelector('.x').addEventListener('click', () => select(null));
+  card.querySelector('[data-act=walk]')?.addEventListener('click', () => walkInto(r));
+}
+
+// ---------- camera moves ----------
+let tween = null;
+function flyTo(pos, target, ms = 900) {
+  if (reduceMotion) ms = 0;
+  tween = { p0: camera.position.clone(), t0: controls.target.clone(), p1: new THREE.Vector3(...pos), t1: new THREE.Vector3(...target), start: performance.now(), ms };
+}
+function focusOn(at, dist) {
+  const y = state.level * FH + SLAB;
+  if (state.mode === 'plan') return flyTo([at[0], y + dist * 2.2, at[1] + 0.01], [at[0], y, at[1]]);
+  const dir = camera.position.clone().sub(controls.target).setY(0).normalize();
+  if (!isFinite(dir.x) || dir.lengthSq() < 0.5) dir.set(0.6, 0, 0.8);
+  flyTo([at[0] + dir.x * dist * 0.75, y + dist * 0.85, at[1] + dir.z * dist * 0.75], [at[0], y, at[1]]);
+}
+
+function setLevel(l) {
+  state.level = l; state.selected = null; state.hovered = null;
+  levelBtns.forEach((b, i) => b.setAttribute('aria-pressed', String(i === l)));
+  renderLevelInfo(); renderCard(); updateVisibility(); paintRooms();
+  if (state.mode === 'floor' || state.mode === 'plan') viewFloor();
+}
+
+function updateVisibility() {
+  const m = state.mode;
+  levels.forEach((g, i) => { g.visible = m === 'exterior' || m === 'walk' || i <= state.level; });
+  const cutting = state.cut && (m === 'floor' || m === 'plan') && state.level !== ROOF;
+  cut.constant = state.level * FH + SLAB + 4.5;
+  renderer.clippingPlanes = cutting ? [cut] : [];
+  for (const k of ['plaster', 'core', 'cabinet', 'wood', 'steel', 'rail']) MAT[k].side = cutting ? THREE.DoubleSide : THREE.FrontSide;
+  levels.forEach((g, i) => { const c = g.getObjectByName('cap'); if (c) c.visible = cutting && i === state.level; });
+  sun.castShadow = m !== 'plan';                                  // long shadows hide the plan
+  hemi.intensity = m === 'walk' ? 1.9 : m === 'plan' ? 1.7 : 1.25;
+  levels.forEach((g) => { const f = g.getObjectByName('furniture'); if (f) f.visible = state.furniture; });
+  if (band) band.visible = false;
+  if (ring) ring.visible = false;
+  $('#scale').hidden = m !== 'plan';
+  hideTip();
+  refreshShadows();
+  const typical = state.level >= 1 && state.level <= TYPICAL;
+  labelGroup.visible = state.labels && typical && (m === 'floor' || m === 'plan');
+  labelGroup.position.y = state.level * FH;
+  groundLabel.visible = state.labels && state.level === 0 && (m === 'floor' || m === 'plan');
+}
+
+function viewFloor() {
+  const y = state.level * FH + SLAB;
+  if (state.mode === 'plan') flyTo([0, y + 128, 0.01], [0, y, 0]);
+  else { const k = fit(); flyTo([62 * k, y + 72 * k, 84 * k], [0, y, 4]); }
+}
+
+function setMode(mode, move = true) {
+  if (state.mode === 'walk' && mode !== 'walk') stopWalk();
+  state.mode = mode;
+  document.querySelectorAll('.modes button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.mode === mode)));
+  controls.autoRotate = false;
+  controls.minPolarAngle = 0;
+  controls.maxPolarAngle = mode === 'plan' ? 0.0001 : Math.PI / 2 - 0.03;
+  setHover(null);
+  if (mode === 'exterior') { if (move) flyTo(...exteriorView()); }
+  else if (mode === 'walk') startWalk();
+  else if (move) viewFloor();
+  updateVisibility();
+  renderHint();
+}
+
+function renderHint() {
+  const touch = matchMedia('(pointer: coarse)').matches;
+  const h = {
+    exterior: touch ? 'Drag to orbit · Pinch to zoom · Tap a floor to look inside' : 'Drag to orbit · <kbd>Scroll</kbd> to zoom · Click any floor of the building to look inside',
+    floor: touch ? 'Tap a room for its size · Drag to orbit' : 'Click a room or its name for details · Drag to orbit · <kbd>Right-drag</kbd> to pan',
+    plan: touch ? 'Tap a room for its size · Drag to pan' : 'Click a room for details · <kbd>Scroll</kbd> to zoom · <kbd>Right-drag</kbd> to pan',
+    walk: touch ? 'Drag to look · Tap the floor to walk there · Use the pad to move' : 'Drag to look · Click the floor to walk there · <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> or arrows · <kbd>Scroll</kbd> to zoom · <kbd>Esc</kbd> to leave',
+  }[state.mode];
+  $('#hint').innerHTML = h;
+}
+
+// ---------- walking ----------
+const clamp = THREE.MathUtils.clamp;
+const walk = { x: 0, z: 0, foot: 0, yaw: 0, pitch: 0, yawT: 0, pitchT: 0, vx: 0, vz: 0, keys: new Set(), joy: [0, 0], goal: null, pending: null, active: false };
+const footLevel = () => clamp(Math.round((walk.foot - SLAB) / FH), 0, ROOF);
+
+function lobbyStart() {                                          // just out of the lift, looking along the passage
+  const d = M.liftDoors[0], cx = (d[0] + d[2]) / 2, cz = (d[1] + d[3]) / 2;
+  return roomAt(cx, cz + 2.5)?.kind === 'lobby' ? [cx, cz + 2.4] : [cx, cz - 2.4];
+}
+function startWalk() {
+  const l = state.level, pend = walk.pending;
+  walk.pending = null;
+  const p = pend?.at || (l === ROOF ? [0, 0] : lobbyStart());
+  Object.assign(walk, { foot: l * FH + SLAB, yaw: pend?.yaw ?? -Math.PI / 2, pitch: -0.08, vx: 0, vz: 0, goal: null, active: true });
+  walk.yawT = walk.yaw; walk.pitchT = walk.pitch;
+  [walk.x, walk.z] = freeSpot(p[0], p[1], l);
+  controls.enabled = false; tween = null;
+  document.body.classList.add('walking');
+  $('#minimap').hidden = false; $('#where').hidden = false;
+  $('#joy').hidden = !matchMedia('(pointer: coarse)').matches;
+  camera.fov = 70; frameView();
+  for (const ds of doorsBy) for (const m of ds || []) {          // inside, doors start closed and open as you reach them
+    const d = m.userData.door;
+    setDoor(m, m.parent === levels[l] && Math.hypot(walk.x - d.c[0], walk.z - d.c[1]) < 5.5 ? 1 : 0);
+  }
+  lamp.intensity = 14; renderer.toneMappingExposure = 1.12;
+}
+function stopWalk() {
+  walk.active = false; controls.enabled = true;
+  document.body.classList.remove('walking');
+  $('#minimap').hidden = true; $('#where').hidden = true; $('#joy').hidden = true;
+  ring.visible = false;
+  lamp.intensity = 0; renderer.toneMappingExposure = 1.05;
+  camera.fov = 42; frameView();
+  camera.position.set(walk.x + 40, walk.foot + 45, walk.z + 50);
+  controls.target.set(walk.x, walk.foot, walk.z);
+}
+function walkInto(room) {                                        // stand where the room opens up best in front of you
+  const l = state.level >= 1 && state.level <= TYPICAL ? state.level : 1;
+  const r = mainRect(room), c = [(r[0] + r[2]) / 2, (r[1] + r[3]) / 2];
+  const spots = [c];
+  const d = M.doors.find((q) => overlaps(q.o, grow(r, 0.6)) && roomAt((q.o[0] + q.o[2]) / 2 + q.u[0], (q.o[1] + q.o[3]) / 2 + q.u[1]) === room);
+  if (d) {
+    const o = [(d.o[0] + d.o[2]) / 2, (d.o[1] + d.o[3]) / 2], v = [c[0] - o[0], c[1] - o[1]], n = Math.hypot(...v) || 1;
+    spots.unshift([o[0] + (v[0] / n) * 1.6, o[1] + (v[1] / n) * 1.6]);
+  }
+  for (const fx of [0.25, 0.75]) for (const fz of [0.25, 0.75]) spots.push([r[0] + W(r) * fx, r[1] + D(r) * fz]);
+  let best = null;
+  const eye = new THREE.Vector3(), dir = new THREE.Vector3();
+  for (const sp of spots) {
+    const [x, z] = freeSpot(sp[0], sp[1], l);
+    if (roomAt(x, z) !== room) continue;
+    for (let i = 0; i < 12; i++) {
+      const yaw = (i / 12) * Math.PI * 2;
+      eye.set(x, l * FH + SLAB + EYE, z); dir.set(-Math.sin(yaw), -0.12, -Math.cos(yaw));
+      ray.set(eye, dir.normalize()); ray.far = 60;
+      const hit = ray.intersectObjects(solids(l).filter((o) => !o.userData.door), false)[0], depth = hit ? hit.distance : 60;
+      const probe = Math.min(depth, 4) - 0.3;                     // prefer views that look into this room, not out of it
+      const inside = roomAt(x - Math.sin(yaw) * probe, z - Math.cos(yaw) * probe) === room;
+      const score = Math.min(depth, 30) + (inside ? 12 : 0) + (sp === spots[0] ? 3 : 0);
+      if (!best || score > best.score) best = { score, at: [x, z], yaw };
+    }
+  }
+  walk.pending = best ? { at: best.at, yaw: best.yaw } : { at: c };
+  if (l !== state.level) setLevel(l);
+  select(null);
+  if (state.mode === 'walk') startWalk(); else setMode('walk');
+}
+
+const inStair = (x, z) => x > stairRect[0] && x < stairRect[2] && z > stairRect[1] && z < stairRect[3];
+function groundAt(x, z, foot) {
+  if (!inStair(x, z)) {
+    const l = clamp(Math.round((foot - SLAB) / FH), 0, ROOF);
+    return l * FH + SLAB;
+  }
+  const local = stairLocal(x, z);
+  let best = null;
+  for (let k = 0; k <= ROOF; k++) {
+    const h = k * FH + SLAB + local;
+    if (local > 0 && k >= ROOF) continue;
+    if (best === null || Math.abs(h - foot) < Math.abs(best - foot)) best = h;
+  }
+  return best;
+}
+function blocked(x, z, level) {
+  for (const r of blockersBy[level] || []) {
+    const cx = Math.max(r[0], Math.min(x, r[2])), cz = Math.max(r[1], Math.min(z, r[3]));
+    if ((cx - x) ** 2 + (cz - z) ** 2 < RADIUS * RADIUS) return true;
+  }
+  return false;
+}
+function freeSpot(x, z, level) {                                // nearest point where a person fits
+  for (let r = 0; r < 8; r += 0.4)
+    for (let a = 0; a < 16; a++) {
+      const px = x + Math.cos((a / 16) * Math.PI * 2) * r, pz = z + Math.sin((a / 16) * Math.PI * 2) * r;
+      if (!blocked(px, pz, level)) return [px, pz];
+    }
+  return [x, z];
+}
+function stepWalk(dt) {
+  const k = walk.keys, has = (...c) => c.some((x) => k.has(x));
+  walk.yawT += ((has('ArrowLeft', 'KeyQ') ? 1 : 0) - (has('ArrowRight', 'KeyE') ? 1 : 0)) * 1.9 * dt;
+  const look = 1 - Math.exp(-dt * 16);                           // ease the view towards where you dragged it
+  walk.yaw += (walk.yawT - walk.yaw) * look;
+  walk.pitch += (walk.pitchT - walk.pitch) * look;
+
+  let f = (has('KeyW', 'ArrowUp') ? 1 : 0) - (has('KeyS', 'ArrowDown') ? 1 : 0) - walk.joy[1];
+  let s = (has('KeyD') ? 1 : 0) - (has('KeyA') ? 1 : 0) + walk.joy[0];
+  const len = Math.hypot(f, s);
+  if (len > 1) { f /= len; s /= len; }
+  const speed = has('ShiftLeft', 'ShiftRight') ? 9 : 4.6, sy = Math.sin(walk.yaw), cy = Math.cos(walk.yaw);
+  let tx = (-sy * f + cy * s) * speed, tz = (-cy * f - sy * s) * speed;
+  if (len > 0.05) walk.goal = null;
+  else if (walk.goal) {                                          // glide to the clicked spot, slowing on arrival
+    const gx = walk.goal[0] - walk.x, gz = walk.goal[1] - walk.z, gd = Math.hypot(gx, gz);
+    if (gd < 0.2) walk.goal = null;
+    else { const v = Math.min(5.5, gd * 2.4); tx = (gx / gd) * v; tz = (gz / gd) * v; }
+  }
+  const acc = 1 - Math.exp(-dt * 9);
+  walk.vx += (tx - walk.vx) * acc; walk.vz += (tz - walk.vz) * acc;
+
+  // a free camera at eye height: nothing blocks you, so any spot and angle is reachable
+  const level = footLevel();
+  walk.x += walk.vx * dt; walk.z += walk.vz * dt;
+  const target = groundAt(walk.x, walk.z, walk.foot);
+  walk.foot += (target - walk.foot) * Math.min(1, dt * 10);
+  camera.position.set(walk.x, walk.foot + EYE, walk.z);
+  camera.rotation.set(walk.pitch, walk.yaw, 0, 'YXZ');
+  lamp.position.set(walk.x, walk.foot + 7.6, walk.z);
+  if (level !== state.level) { state.level = level; levelBtns.forEach((b, i) => b.setAttribute('aria-pressed', String(i === level))); renderLevelInfo(); }
+  updateWhere(level);
+}
+
+function setDoor(m, t) { const d = m.userData.door; d.t = t; m.rotation.y = d.closed + d.delta * t * t * (3 - 2 * t); }
+function updateDoors(dt) {                                       // outside walk mode every door shows open, as drawn
+  for (let l = 1; l <= TYPICAL; l++) for (const m of doorsBy[l]) {
+    const d = m.userData.door;
+    const want = !walk.active ? 1 : l === footLevel() && Math.hypot(walk.x - d.c[0], walk.z - d.c[1]) < 5.5 ? 1 : 0;
+    if (d.t !== want) setDoor(m, want > d.t ? Math.min(1, d.t + dt * 1.6) : Math.max(0, d.t - dt * 1.1));
+  }
+}
+function roomAt(x, z) {
+  return M.rooms.find((r) => r.rects.some((q) => x >= q[0] && x <= q[2] && z >= q[1] && z <= q[3]));
+}
+let lastWhere = '';
+function updateWhere(level) {
+  const r = roomAt(walk.x, walk.z);
+  let txt;
+  if (level === 0) txt = `Ground floor <span>· ${r && ['stair', 'lift'].includes(r.kind) ? r.name : 'parking'}</span>`;
+  else if (level === ROOF) txt = 'Roof';
+  else txt = r ? `${r.unit ? flat(level, r.unit) : levelName(level)} <span>· ${r.name}</span>` : `${levelName(level)}`;
+  if (inStair(walk.x, walk.z)) txt = `Staircase <span>· near ${levelName(level)}</span>`;
+  if (txt !== lastWhere) { $('#where').innerHTML = txt; lastWhere = txt; }
+}
+
+window.viewer = { walk, state, stepWalk, walkInto, camera, scene, pick: (x, y) => pick({ clientX: x, clientY: y }) };                                 // handy for inspecting from the console
+
+// ---------- minimap ----------
+const mini = $('#minimap'), mctx = mini.getContext('2d');
+const plotBox = bbox(M.plot.map(([x, z]) => [x, z, x, z]));
+const mmScale = (mini.width - 24) / Math.max(W(plotBox), D(plotBox));
+const mm = (x, z) => [12 + (x - plotBox[0]) * mmScale + (mini.width - 24 - W(plotBox) * mmScale) / 2, 12 + (z - plotBox[1]) * mmScale + (mini.height - 24 - D(plotBox) * mmScale) / 2];
+let mmBase = null;
+function drawMinimapBase() {
+  const c = document.createElement('canvas'); c.width = mini.width; c.height = mini.height;
+  const x = c.getContext('2d');
+  x.fillStyle = css('--panel-solid'); x.fillRect(0, 0, c.width, c.height);
+  const rect = (r, fill) => { const a = mm(r[0], r[1]), b = mm(r[2], r[3]); x.fillStyle = fill; x.fillRect(a[0], a[1], b[0] - a[0], b[1] - a[1]); };
+  M.footprint.forEach((r) => rect(r, css('--line')));
+  for (const r of M.rooms) {
+    const col = r.unit ? new THREE.Color(unitColor(r.unit)) : new THREE.Color(css('--muted'));
+    const fill = `rgba(${Math.round(col.r * 255)},${Math.round(col.g * 255)},${Math.round(col.b * 255)},0.38)`;
+    r.rects.forEach((q) => rect(q, fill));
+  }
+  [...walls, ...M.columns].forEach((r) => rect(grow(r, 0.15), css('--ink')));
+  mmBase = c;
+}
+function drawMinimap() {
+  if (!mmBase) drawMinimapBase();
+  mctx.drawImage(mmBase, 0, 0);
+  const [px, py] = mm(walk.x, walk.z);
+  mctx.save(); mctx.translate(px, py); mctx.rotate(-walk.yaw);
+  mctx.fillStyle = css('--accent'); mctx.globalAlpha = 0.25;
+  mctx.beginPath(); mctx.moveTo(0, 0); mctx.arc(0, 0, 34, -Math.PI / 2 - 0.6, -Math.PI / 2 + 0.6); mctx.closePath(); mctx.fill();
+  mctx.globalAlpha = 1; mctx.beginPath(); mctx.arc(0, 0, 6, 0, Math.PI * 2); mctx.fill();
+  mctx.strokeStyle = css('--panel-solid'); mctx.lineWidth = 2; mctx.stroke();
+  mctx.restore();
+}
+
+// ---------- input ----------
+const ray = new THREE.Raycaster(), ptr = new THREE.Vector2();
+let down = null, pendingHover = null;
+function aim(e) {
+  const rect = renderer.domElement.getBoundingClientRect();
+  ptr.set(((e.clientX - rect.left) / rect.width) * 2 - 1, -((e.clientY - rect.top) / rect.height) * 2 + 1);
+  ray.setFromCamera(ptr, camera);
+}
+const solids = (l) => [...levels[l].children.filter((c) => c.isMesh && c.material !== MAT.glass), ...(levels[l].getObjectByName('furniture')?.children || [])];
+function pick(e) {
+  if (state.mode !== 'floor' && state.mode !== 'plan') return null;
+  aim(e); ray.far = Infinity;
+  const top = renderer.clippingPlanes.length ? cut.constant : Infinity;   // raycasts ignore clipping, so skip what the cut hides
+  const hit = ray.intersectObjects(roomMeshes[state.level] || [], false).find((h) => h.point.y <= top);   // furniture and walls never hide the room under them
+  return hit ? hit.object : null;
+}
+function levelAt(e) {
+  aim(e); ray.far = Infinity;
+  const hit = ray.intersectObject(proxy, false)[0];
+  return hit ? clamp(Math.floor(hit.point.y / FH), 0, ROOF) : null;
+}
+function floorPoint(e) {                                         // a walkable spot on the floor you are on
+  aim(e); ray.far = 70;
+  const l = footLevel(), hit = ray.intersectObjects(solids(l), false)[0];
+  if (!hit || !hit.face || hit.face.normal.y < 0.7 || Math.abs(hit.point.y - (l * FH + SLAB)) > 0.6) return null;
+  return [hit.point.x, hit.point.z];
+}
+const tip = $('#tip');
+function showTip(e, html) { tip.innerHTML = html; tip.hidden = false; tip.style.left = `${e.clientX}px`; tip.style.top = `${e.clientY}px`; }
+function hideTip() { tip.hidden = true; }
+function hover(e) {                                              // runs at most once per frame
+  if (walk.active) {
+    const p = floorPoint(e);
+    ring.visible = !!p;
+    if (p) ring.position.set(p[0], footLevel() * FH + SLAB + 0.04, p[1]);
+    renderer.domElement.style.cursor = p ? 'pointer' : '';
+    return;
+  }
+  if (state.mode === 'exterior') {
+    const l = levelAt(e);
+    band.visible = l !== null;
+    renderer.domElement.style.cursor = l !== null ? 'pointer' : '';
+    if (l === null) return hideTip();
+    band.position.y = l * FH;
+    const what = l === 0 ? 'car parking and core' : l === ROOF ? 'roof terrace' : '3 flats';
+    return showTip(e, `<b>${levelName(l)}</b><span>${what} · click to look inside</span>`);
+  }
+  const m = pick(e);
+  setHover(m);
+  if (!m) return hideTip();
+  const r = m.userData.room, where = r.unit ? `${flat(state.level, r.unit)} · ` : '';
+  showTip(e, `<b>${r.name}</b><span>${where}</span><code>${fmtDim(r.dim) || `≈ ${Math.round(r.area)} sft`}</code>`);
+}
+
+const el = renderer.domElement;
+el.addEventListener('pointerdown', (e) => {
+  down = { x: e.clientX, y: e.clientY, lx: e.clientX, ly: e.clientY };
+  controls.autoRotate = false;
+  if (walk.active) el.setPointerCapture(e.pointerId);
+});
+el.addEventListener('pointermove', (e) => {
+  if (walk.active && down) {                                     // drag the view, like grabbing a photo sphere
+    const k = 0.0042 * (camera.fov / 70);
+    walk.yawT += (e.clientX - down.lx) * k;
+    walk.pitchT = clamp(walk.pitchT + (e.clientY - down.ly) * k, -1.45, 1.45);
+    down.lx = e.clientX; down.ly = e.clientY;
+    ring.visible = false;
+    return;
+  }
+  if (e.pointerType !== 'mouse' || e.buttons) { hideTip(); band.visible = false; return; }
+  pendingHover = e;
+});
+el.addEventListener('pointerleave', () => { pendingHover = null; hideTip(); band.visible = false; ring.visible = false; setHover(null); });
+el.addEventListener('pointerup', (e) => {
+  const moved = down && Math.hypot(e.clientX - down.x, e.clientY - down.y) > 6;
+  down = null;
+  if (moved) return;
+  if (walk.active) {
+    const p = floorPoint(e);
+    if (p) { walk.goal = p; ring.visible = true; ring.position.set(p[0], footLevel() * FH + SLAB + 0.04, p[1]); }
+    return;
+  }
+  if (state.mode === 'exterior') {
+    const l = levelAt(e);
+    if (l !== null) { band.visible = false; hideTip(); setLevel(l); setMode('floor'); }
+    return;
+  }
+  const m = pick(e);
+  if (m) select(m.userData.room);
+  else select(null);
+});
+el.addEventListener('wheel', (e) => {
+  if (!walk.active) return;
+  e.preventDefault();
+  camera.fov = clamp(camera.fov + Math.sign(e.deltaY) * 5, 35, 85);
+  camera.updateProjectionMatrix();
+}, { passive: false });
+
+const MODE_KEYS = { Digit1: 'exterior', Digit2: 'floor', Digit3: 'plan', Digit4: 'walk' };
+addEventListener('keydown', (e) => {
+  if (e.target.closest && e.target.closest('input, textarea, select')) return;
+  if (MODE_KEYS[e.code] && !e.metaKey && !e.ctrlKey) return setMode(MODE_KEYS[e.code]);
+  if (walk.active) {
+    if (e.code === 'Escape') return setMode('floor');
+    walk.keys.add(e.code);
+    if (e.code.startsWith('Arrow') || e.code === 'Space') e.preventDefault();
+    return;
+  }
+  if (e.code === 'PageUp' || e.code === 'PageDown') {
+    e.preventDefault();
+    setLevel(clamp(state.level + (e.code === 'PageUp' ? 1 : -1), 0, ROOF));
+    if (state.mode === 'exterior') setMode('floor');
+  }
+  if (e.code === 'Escape') select(null);
+});
+addEventListener('keyup', (e) => walk.keys.delete(e.code));
+addEventListener('blur', () => walk.keys.clear());
+
+const joy = $('#joy'), knob = joy.querySelector('i');
+joy.addEventListener('pointerdown', (e) => { joy.setPointerCapture(e.pointerId); moveJoy(e); });
+joy.addEventListener('pointermove', (e) => { if (e.buttons || e.pointerType === 'touch') moveJoy(e); });
+const endJoy = () => { walk.joy = [0, 0]; knob.style.transform = ''; };
+joy.addEventListener('pointerup', endJoy); joy.addEventListener('pointercancel', endJoy);
+function moveJoy(e) {
+  const r = joy.getBoundingClientRect(), R = r.width / 2;
+  let dx = (e.clientX - r.left - R) / R, dy = (e.clientY - r.top - R) / R;
+  const l = Math.hypot(dx, dy); if (l > 1) { dx /= l; dy /= l; }
+  walk.joy = [dx, dy];
+  knob.style.transform = `translate(${dx * R * 0.6}px, ${dy * R * 0.6}px)`;
+}
+
+mini.addEventListener('click', (e) => {                          // jump to a spot on the mini-map
+  const r = mini.getBoundingClientRect(), k = mini.width / r.width;
+  const x = plotBox[0] + ((e.clientX - r.left) * k - 12 - (mini.width - 24 - W(plotBox) * mmScale) / 2) / mmScale;
+  const z = plotBox[1] + ((e.clientY - r.top) * k - 12 - (mini.height - 24 - D(plotBox) * mmScale) / 2) / mmScale;
+  if (!M.footprint.some((q) => x >= q[0] && x <= q[2] && z >= q[1] && z <= q[3])) return;
+  walk.goal = null; walk.vx = walk.vz = 0;
+  [walk.x, walk.z] = freeSpot(x, z, footLevel());
+});
+
+document.querySelectorAll('.modes button').forEach((b) => b.addEventListener('click', () => setMode(b.dataset.mode)));
+$('#optLabels').addEventListener('change', (e) => { state.labels = e.target.checked; updateVisibility(); });
+$('#optCut').addEventListener('change', (e) => { state.cut = e.target.checked; updateVisibility(); });
+$('#optFurniture').addEventListener('change', (e) => { state.furniture = e.target.checked; updateVisibility(); });
+$('#optSun').addEventListener('input', (e) => setSun(+e.target.value));
+$('#menuBtn').addEventListener('click', () => {
+  const open = $('#panel').classList.toggle('open');
+  $('#menuBtn').setAttribute('aria-expanded', String(open));
+});
+
+// pull the camera back on narrow screens so the whole building fits across
+const fit = () => Math.max(1, 0.7 / camera.aspect);
+const exteriorView = (k = 1) => [[118 * k * fit(), 78 * k * fit() * 0.9 + 6, 150 * k * fit()], [0, 40, 0]];
+
+// keep the building centred in the space the side panel and level stack leave free
+function frameView() {
+  const w = innerWidth, h = innerHeight, wide = w > 1100 && !walk.active;
+  const shift = wide ? ($('#panel').getBoundingClientRect().right - (w - $('#levels').getBoundingClientRect().left)) / 2 : 0;
+  if (shift) camera.setViewOffset(w, h, -shift, 0, w, h); else camera.clearViewOffset();
+  camera.updateProjectionMatrix();
+}
+
+// plan scale bar: a round length that draws 70 to 170 px long
+const sa = new THREE.Vector3(), sb = new THREE.Vector3(), scaleBar = $('#scaleBar'), scaleTxt = $('#scaleTxt');
+function updateScale() {
+  sa.copy(controls.target).project(camera); sb.copy(controls.target).add(new THREE.Vector3(1, 0, 0)).project(camera);
+  const perFt = (Math.abs(sb.x - sa.x) * innerWidth) / 2, ft = [2, 5, 10, 20, 50].find((f) => f * perFt >= 70) || 50;
+  scaleBar.style.width = `${Math.round(ft * perFt)}px`; scaleTxt.textContent = `${ft} ft`;
+}
+
+// ---------- loop ----------
+function resize() {
+  const w = innerWidth, h = innerHeight;
+  renderer.setSize(w, h); labelRenderer.setSize(w, h);
+  camera.aspect = w / h; frameView();
+  document.documentElement.style.setProperty('--brand-h', `${$('#brand').offsetHeight}px`);
+}
+addEventListener('resize', resize);
+const needle = $('#needle'), fwd = new THREE.Vector3();
+let last = performance.now();
+function frame(now) {
+  const dt = Math.min(0.05, (now - last) / 1000); last = now;
+  if (tween) {
+    const t = tween.ms ? Math.min(1, (now - tween.start) / tween.ms) : 1, e = t < 0.5 ? 4 * t * t * t : 1 - (-2 * t + 2) ** 3 / 2;
+    camera.position.lerpVectors(tween.p0, tween.p1, e); controls.target.lerpVectors(tween.t0, tween.t1, e);
+    if (t >= 1) tween = null;
+  }
+  if (pendingHover) { hover(pendingHover); pendingHover = null; }
+  if (walk.active) { stepWalk(dt); drawMinimap(); } else controls.update();
+  updateDoors(dt);
+  if (state.mode === 'plan') updateScale();
+  camera.getWorldDirection(fwd);
+  needle.style.transform = `rotate(${-Math.atan2(fwd.x, -fwd.z)}rad)`;
+  // compact labels when far away so the plan stays readable
+  const far = camera.position.distanceTo(controls.target) > (state.mode === 'plan' ? 175 : 120);
+  labelEls.forEach((l) => l.classList.toggle('compact', far || l.dataset.small === 'true'));
+  renderer.render(scene, camera);
+  labelRenderer.render(scene, camera);
+  requestAnimationFrame(frame);
+}
+
+// ---------- start ----------
+applyTheme();
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => { applyTheme(); mmBase = null; });
+new MutationObserver(() => { applyTheme(); mmBase = null; }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+build();
+buildLevelButtons();
+setSun(10.5);
+resize();
+{ const [p, t] = exteriorView(1.25); camera.position.set(...p); controls.target.set(...t); }
+controls.autoRotate = !reduceMotion; controls.autoRotateSpeed = 0.35;
+setLevel(3);
+setMode('exterior', false);
+requestAnimationFrame(frame);
+$('#loading').style.opacity = '0';
+setTimeout(() => $('#loading').remove(), 450);
+</script>
